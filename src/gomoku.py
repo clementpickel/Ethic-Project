@@ -1,16 +1,31 @@
+from bot import Bot
+from enum import Enum
+
+class GameState(Enum):
+    START = 1
+    PLAYER_1 = 'X'
+    PLAYER_2 = 'O'
+    FINISHED = 4
+
+class TurnResult(Enum):
+    VALID = 1
+    INVALID = 2
+    WIN = 3
+    DRAW = 4
+
 class Gomoku:
-    def __init__(self, size=15):
+    def __init__(self, player_1: Bot, player_2: Bot, size=15):
         self.size = size
-        self.board = [[None for _ in range(size)] for _ in range(size)]
-        self.current_player = 'X'  # Player 'X' starts
-        self.game_over = False
+        self.player_1 = player_1
+        self.player_2 = player_2
         self.winner = None
+        self.board = [[None for _ in range(size)] for _ in range(size)]
+        self.game_state = GameState.START
 
     def reset(self):
         """Reset the game to its initial state"""
         self.board = [[None for _ in range(self.size)] for _ in range(self.size)]
-        self.current_player = 'X'
-        self.game_over = False
+        self.game_state = GameState.START
         self.winner = None
 
     def get_valid_moves(self):
@@ -21,28 +36,24 @@ class Gomoku:
         """Check if a move is valid"""
         return 0 <= row < self.size and 0 <= col < self.size and self.board[row][col] is None
 
-    def make_move(self, row, col):
+    def make_move(self, row, col) -> TurnResult:
         """
         Make a move on the board
         Returns True if move was valid, False otherwise
         """
-        if self.game_over or not self.is_valid_move(row, col):
-            return False
+        if not self.is_valid_move(row, col):
+            return TurnResult.INVALID
 
         # Place the stone
-        self.board[row][col] = self.current_player
+        self.board[row][col] = self.game_state.value
 
         # Check for win
         if self.check_win(row, col):
-            self.winner = self.current_player
-            self.game_over = True
+            return TurnResult.WIN
         elif self.is_draw():
-            self.game_over = True
-        else:
-            # Switch players if game continues
-            self.current_player = 'O' if self.current_player == 'X' else 'X'
+            return TurnResult.DRAW
         
-        return True
+        return TurnResult.VALID
 
     def check_win(self, row, col):
         """Check if the last move resulted in a win"""
@@ -70,33 +81,42 @@ class Gomoku:
     def is_draw(self):
         """Check if the game is a draw"""
         return all(cell is not None for row in self.board for cell in row)
+    
+    def game_turn(self):
+        if self.game_state == GameState.START:
+            self.game_state = GameState.PLAYER_1
+
+        elif self.game_state == GameState.PLAYER_1:
+            row, col = self.player_1.play(self.board)
+            res = self.make_move(row, col)
+            if res == TurnResult.WIN or res == TurnResult.DRAW:
+                self.game_state = GameState.FINISHED
+                if res == TurnResult.WIN:
+                    self.winner = GameState.PLAYER_1
+            else:
+                self.game_state = GameState.PLAYER_2
+
+        elif self.game_state == GameState.PLAYER_2:
+            row, col = self.player_2.play(self.board)
+            res = self.make_move(row, col)
+            if res == TurnResult.WIN or res == TurnResult.DRAW:
+                self.game_state = GameState.FINISHED
+                if res == TurnResult.WIN:
+                    self.winner = GameState.PLAYER_2
+            else:
+                self.game_state = GameState.PLAYER_1
+
+    def game_loop(self, number_of_moves=100):
+        move_counter = 0
+        while self.game_state != GameState.FINISHED and move_counter < number_of_moves:
+            self.game_turn()
+            move_counter += 1
 
     def print_board(self):
         """Print the current board state with row/col labels"""
-        # Column headers
         print('   ' + ' '.join(f"{c:2}" for c in range(self.size)))
         
         for r in range(self.size):
-            # Row number with padding
             print(f"{r:2} ", end='')
-            # Board cells
             print(' '.join(f"{' ' if cell is None else cell:2}" for cell in self.board[r]))
         print()
-
-# Example usage:
-if __name__ == "__main__":
-    game = Gomoku()
-    
-    # Example game sequence
-    moves = [(7,7), (7,8), (8,8), (8,7), (9,9), (9,8), (10,10)]
-    
-    for move in moves:
-        if not game.game_over:
-            row, col = move
-            game.make_move(row, col)
-            game.print_board()
-    
-    if game.winner:
-        print(f"Player {game.winner} wins!")
-    else:
-        print("It's a draw!")

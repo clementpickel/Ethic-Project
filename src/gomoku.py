@@ -1,17 +1,7 @@
 from bot import Bot
-from enum import Enum
+from menum import TurnResult, GameState
+import copy
 
-class GameState(Enum):
-    START = 1
-    PLAYER_1 = 'X'
-    PLAYER_2 = 'O'
-    FINISHED = 4
-
-class TurnResult(Enum):
-    VALID = 1
-    INVALID = 2
-    WIN = 3
-    DRAW = 4
 
 class Gomoku:
     def __init__(self, player_1: Bot, player_2: Bot, size=15):
@@ -87,8 +77,9 @@ class Gomoku:
             self.game_state = GameState.PLAYER_1
 
         elif self.game_state == GameState.PLAYER_1:
-            row, col = self.player_1.play(self.board)
+            row, col = self.player_1.play(copy.deepcopy(self.board))
             res = self.make_move(row, col)
+            print("player 1 move",row, col, res)
             if res == TurnResult.WIN or res == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if res == TurnResult.WIN:
@@ -97,8 +88,9 @@ class Gomoku:
                 self.game_state = GameState.PLAYER_2
 
         elif self.game_state == GameState.PLAYER_2:
-            row, col = self.player_2.play(self.board)
+            row, col = self.player_2.play(copy.deepcopy(self.board))
             res = self.make_move(row, col)
+            print("player 2 move",row, col, res)
             if res == TurnResult.WIN or res == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if res == TurnResult.WIN:

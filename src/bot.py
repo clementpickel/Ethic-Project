@@ -1,8 +1,12 @@
+from menum import GameState
+
 class Bot:
-    def __init__(self):
+    def __init__(self, symbol: GameState):
+        self.player = symbol
+        self.opponent = GameState.PLAYER_1 if symbol == GameState.PLAYER_2 else GameState.PLAYER_2
         pass
     
-    def play(self, board: list[list[str]]) -> tuple:
+    def play(self, board: list[list[str]]) -> tuple: #take the board as input and return the move as a tuple
         pass
 
 class StupidBot(Bot):

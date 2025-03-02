@@ -6,9 +6,6 @@ class MinMaxBot(Bot):
         self.depth = depth  # Search depth (higher = stronger but slower)
 
     def play(self, board: list[list[str]]) -> tuple:
-        # Determine player symbol based on current board state
-        self._set_symbols(board)
-        
         # Get list of valid moves (empty cells adjacent to existing pieces)
         valid_moves = self._get_valid_moves(board)
         

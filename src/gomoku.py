@@ -98,7 +98,7 @@ class Gomoku:
             print("Player 2 is playing...")
             row, col = self.player_2.play(copy.deepcopy(self.board))
             res = self.make_move(row, col)
-            print(f"Player 2 ({self.player_1.botType}) move {row, col} {res}")
+            print(f"Player 2 ({self.player_2.botType}) move {row, col} {res}")
             if res == TurnResult.WIN or res == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if res == TurnResult.WIN:

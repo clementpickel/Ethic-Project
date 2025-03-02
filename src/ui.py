@@ -43,4 +43,7 @@ class GomokuGUI:
             self.update_board()
             self.root.after(500, self.play_game)  # Schedule next move
         else:
-            print("Winner:", self.game.winner.value)  # Print winner in terminal
+            if self.game.winner.value == 'X':
+                print(f"Winner is Player 1")
+            else:
+                print(f"Winner is Player 2")

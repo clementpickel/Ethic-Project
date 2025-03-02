@@ -12,9 +12,13 @@ class Gomoku:
         self.board = [[None for _ in range(size)] for _ in range(size)]
         self.game_state = GameState.START
 
+        print(
+            f"Game begin. Player one is a {player_1.botType} and player 2 is a {player_2.botType}")
+
     def reset(self):
         """Reset the game to its initial state"""
-        self.board = [[None for _ in range(self.size)] for _ in range(self.size)]
+        self.board = [[None for _ in range(self.size)]
+                      for _ in range(self.size)]
         self.game_state = GameState.START
         self.winner = None
 
@@ -42,13 +46,14 @@ class Gomoku:
             return TurnResult.WIN
         elif self.is_draw():
             return TurnResult.DRAW
-        
+
         return TurnResult.VALID
 
     def check_win(self, row, col):
         """Check if the last move resulted in a win"""
         player = self.board[row][col]
-        directions = [(0, 1), (1, 0), (1, 1), (1, -1)]  # horizontal, vertical, two diagonals
+        # horizontal, vertical, two diagonals
+        directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
 
         for dr, dc in directions:
             count = 1
@@ -71,15 +76,17 @@ class Gomoku:
     def is_draw(self):
         """Check if the game is a draw"""
         return all(cell is not None for row in self.board for cell in row)
-    
+
     def game_turn(self):
         if self.game_state == GameState.START:
             self.game_state = GameState.PLAYER_1
 
         elif self.game_state == GameState.PLAYER_1:
+            print("Player 1 is playing...")
             row, col = self.player_1.play(copy.deepcopy(self.board))
             res = self.make_move(row, col)
-            print("player 1 move",row, col, res)
+            print(f"Player 1 ({self.player_1.botType}) move {row, col} {res}")
+
             if res == TurnResult.WIN or res == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if res == TurnResult.WIN:
@@ -88,9 +95,10 @@ class Gomoku:
                 self.game_state = GameState.PLAYER_2
 
         elif self.game_state == GameState.PLAYER_2:
+            print("Player 2 is playing...")
             row, col = self.player_2.play(copy.deepcopy(self.board))
             res = self.make_move(row, col)
-            print("player 2 move",row, col, res)
+            print(f"Player 2 ({self.player_1.botType}) move {row, col} {res}")
             if res == TurnResult.WIN or res == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if res == TurnResult.WIN:
@@ -107,8 +115,9 @@ class Gomoku:
     def print_board(self):
         """Print the current board state with row/col labels"""
         print('   ' + ' '.join(f"{c:2}" for c in range(self.size)))
-        
+
         for r in range(self.size):
             print(f"{r:2} ", end='')
-            print(' '.join(f"{' ' if cell is None else cell:2}" for cell in self.board[r]))
+            print(
+                ' '.join(f"{' ' if cell is None else cell:2}" for cell in self.board[r]))
         print()

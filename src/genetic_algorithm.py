@@ -1,13 +1,14 @@
 # genetic_algorithm.py
 import random
+from menum import GameState
+from gomoku import Gomoku
+from bot import StupidBot
 
 def evaluate_bot(bot, num_games=10, opponent_class=None, symbol=None, board_size=15):
     wins = 0
-    from gomoku import Gomoku
-    from bot import StupidBot
+
     if opponent_class is None:
         opponent_class = StupidBot
-    from constants import GameState
     if symbol is None:
         symbol = GameState.PLAYER_1
     for _ in range(num_games):

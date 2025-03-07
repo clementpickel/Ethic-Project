@@ -1,9 +1,10 @@
 # gomoku.py
 import copy
 from menum import GameState, TurnResult
+from bot import Bot
 
 class Gomoku:
-    def __init__(self, player_1, player_2, size=15):
+    def __init__(self, player_1: Bot, player_2: Bot, size=15):
         self.size = size
         self.player_1 = player_1
         self.player_2 = player_2

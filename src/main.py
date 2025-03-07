@@ -9,11 +9,12 @@ from ui import GomokuGUI
 
 # Main program
 if __name__ == "__main__":
-    bot1 = StupidBot(symbol=GameState.PLAYER_1)
-    bot2 = StupidBot2(symbol=GameState.PLAYER_2)
-    game = Gomoku(bot1, bot2)
+    # bot1 = StupidBot(symbol=GameState.PLAYER_1)
+    # bot2 = MinMaxBot(symbol=GameState.PLAYER_2)
+    # game = Gomoku(bot1, bot2)
 
     root = tk.Tk()
     root.title("Gomoku Game")
-    gui = GomokuGUI(root, game)
+    # gui = GomokuGUI(root, game)
+    gui = GomokuGUI(root)
     root.mainloop()

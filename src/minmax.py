@@ -104,7 +104,7 @@ class MinMaxBot(Bot):
         """Get empty cells adjacent to existing pieces"""
         valid = []
         directions = [(-1, -1), (-1, 0), (-1, 1),
-                      (0, -1),         (0, 1),
+                      (0, -1),            (0, 1),
                       (1, -1),  (1, 0),  (1, 1)]
 
         for row in range(15):

@@ -8,6 +8,7 @@ from ui import GomokuGUI, TrainingGUI, HumanGUI
 from human_bot import HumanPlayer
 from training import TrainingManager
 from learning_bot import LearningBot
+from heuribot_bot import HeuribotBot
 
 
 def main():
@@ -19,6 +20,8 @@ def main():
             mode = "train_gui"   # training with GUI
         elif sys.argv[1] == "play_human":
             mode = "play_human"  # human vs. LearningBot in GUI
+        elif sys.argv[1] == "heuribot":
+            mode = "heuribot"
         elif sys.argv[1] == "play_bot":
             mode = "play_bot"    # bot vs. bot GUI play
 
@@ -58,6 +61,20 @@ def main():
         game = Gomoku(human, bot)
         root = tk.Tk()
         root.title("Gomoku: Human vs. LearningBot")
+        HumanGUI(root, game)
+        root.mainloop()
+    elif mode == "heuribot":
+        # Human vs. HeuribotBot GUI play. Human is Player 1.
+        human = HumanPlayer(GameState.PLAYER_1)
+        bot = HeuribotBot(GameState.PLAYER_2)
+        try:
+            bot.load_q_table("bot2_q.json")
+            print("Loaded trained model for LearningBot.")
+        except Exception as e:
+            print("No trained model found; using untrained LearningBot.")
+        game = Gomoku(human, bot)
+        root = tk.Tk()
+        root.title("Gomoku: Human vs. HeuribotBot")
         HumanGUI(root, game)
         root.mainloop()
     else:  # play_bot mode (default)

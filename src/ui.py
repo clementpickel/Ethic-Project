@@ -1,10 +1,138 @@
 # ui.py
 import tkinter as tk
+from tkinter import ttk
 from menum import GameState, TurnResult
+from game_manager import GameManager
+from menum import GameState
+from human_bot import HumanPlayer
+from training import TrainingManager
+from learning_bot import LearningBot
+from bot import StupidBot, StupidBot2
+from gomoku import Gomoku
 
 CELL_SIZE = 40
 
-class GomokuGUI:
+class MenuGUI:
+    def __init__(self, root):
+        self.root = root
+        # Set a fixed window size
+        self.root.geometry("400x400")
+        self.game_manager = GameManager()
+        self.game_happening = False
+
+        self.draw_menu()
+
+    def draw_menu(self):
+        # Destroy previous menu_frame if exists
+        if hasattr(self, 'menu_frame'):
+            self.menu_frame.destroy()
+
+        self.menu_frame = tk.Frame(self.root, width=280, height=230)
+        self.menu_frame.pack(expand=True)
+        self.menu_frame.pack_propagate(False)
+
+        values = ["Stupid bot 1", "Stupid bot 2", "MinMax bot", "Learning Bot", "You play"]
+        values_mode = ["Human vs Bot", "Bot vs bot", "Train without GUI", "Train with GUI"]
+
+        dropdown_mode= ttk.Combobox(self.menu_frame, state="readonly", values=values_mode)
+        dropdown_mode.current(3)
+
+        dropdown_selection_player_one = ttk.Combobox(self.menu_frame, state="readonly", values=values)
+        dropdown_selection_player_one.current(0)
+
+        dropdown_selection_player_two = ttk.Combobox(self.menu_frame, state="readonly", values=values)
+        dropdown_selection_player_two.current(1)
+
+        play_btn = tk.Button(self.menu_frame, text="play!", command=lambda: self.start_game(dropdown_selection_player_one.get(), dropdown_selection_player_two.get(), dropdown_mode.get()))
+        quit_btn = tk.Button(self.menu_frame, text="quit")
+
+        if self.game_happening:
+            quit_btn = tk.Button(self.menu_frame, text="quit", command=self.root.destroy)
+            quit_btn.place(x=60, y=140)
+        else:
+            # Labels
+            tk.Label(self.menu_frame, text="Select mode").place(x=10, y=10)
+            tk.Label(self.menu_frame, text="Player one").place(x=10, y=50)
+            tk.Label(self.menu_frame, text="Player two").place(x=10, y=90)
+
+            # Dropdowns and Button
+            dropdown_mode.place(x=110, y=10)
+            dropdown_selection_player_one.place(x=110, y=50)
+            dropdown_selection_player_two.place(x=110, y=90)
+            play_btn.place(x=60, y=130)
+
+    def start_game(self, bot1_name, bot2_name, mode_name):
+        self.game_happening = True
+        self.launch_game(bot1_name, bot2_name, mode_name)
+        #self.draw_board()
+        #self.update_board()
+        #self.side_panel()
+        #self.draw_menu()
+        #self.root.after(500, self.play_game)
+
+    def launch_game(self, bot1_name, bot2_name, mode_name):
+        values_mode = ["Human vs Bot", "Bot vs bot", "Train without GUI", "Train with GUI"]
+        print(f"Launching {mode_name} game with: {bot1_name} and {bot2_name}")
+
+        #bot1, bot2 = self.game_manager.define_bots(bot1_name, bot2_name)
+
+        if mode_name == "Train without GUI":
+            print("Train without GUI")
+            print("Starting headless training...")
+            bot1 = LearningBot(GameState.PLAYER_1)
+            bot2 = LearningBot(GameState.PLAYER_2)
+            bot1.load_q_table("bot1_q.json")
+            bot2.load_q_table("bot2_q.json")
+            trainer = TrainingManager(bot1, bot2, num_games=5000)
+            trainer.run_training_session()
+            bot1.save_q_table("bot1_q.json")
+            bot2.save_q_table("bot2_q.json")
+        elif mode_name == "Train with GUI":
+            print("Train with GUI")
+            # GUI training: show each game with delay and running stats.
+            bot1 = StupidBot(GameState.PLAYER_1)
+            bot2 = LearningBot(GameState.PLAYER_2)
+            try:
+                bot2.load_q_table("bot2_q.json")
+                print("Loaded trained model for LearningBot.")
+            except Exception as e:
+                print("No trained model found; starting with untrained LearningBot.")
+            game = Gomoku(bot1, bot2)
+            root = tk.Tk()
+            root.title("Gomoku Training Mode (GUI)")
+            TrainingGUI(root, game, training_games=5000, delay=500)
+            root.mainloop()
+        elif mode_name == "Human vs Bot":
+            print("play human")
+            # Human vs. LearningBot GUI play. Human is Player 1.
+            human = HumanPlayer(GameState.PLAYER_1)
+            bot = LearningBot(GameState.PLAYER_2)
+            try:
+                bot.load_q_table("bot2_q.json")
+                print("Loaded trained model for LearningBot.")
+            except Exception as e:
+                print("No trained model found; using untrained LearningBot.")
+            game = Gomoku(human, bot)
+            root = tk.Tk()
+            root.title("Gomoku: Human vs. LearningBot")
+            HumanVsBotGUI(root, game)
+            root.mainloop()
+        else:  # play_bot mode (default)
+            print("play bot mode")
+            bot1 = StupidBot(GameState.PLAYER_1)
+            bot2 = LearningBot(GameState.PLAYER_2)
+            try:
+                bot2.load_q_table("bot2_q.json")
+                print("Loaded trained model for LearningBot.")
+            except Exception as e:
+                print("No trained model found; using untrained LearningBot.")
+            game = Gomoku(bot1, bot2)
+            root = tk.Tk()
+            root.title("Gomoku: Bot vs. Bot")
+            GomokuBotVsBotGUI(root, game)
+            root.mainloop()
+
+class GomokuBotVsBotGUI:
     """GUI for a single game (bot vs. bot)."""
     def __init__(self, root, game, size=15):
         self.root = root
@@ -109,7 +237,7 @@ class TrainingGUI:
                 print("Final Stats:", self.stats)
                 self.info_label.config(text=f"Training complete. Stats:\nBot1 wins: {self.stats['bot1']} | Bot2 wins: {self.stats['bot2']} | Draws: {self.stats['draw']}")
 
-class HumanGUI:
+class HumanVsBotGUI:
     """GUI for human vs. LearningBot. Human is Player 1."""
     def __init__(self, root, game, size=15):
         self.root = root
@@ -150,7 +278,7 @@ class HumanGUI:
                 # Set the human player's move.
                 self.game.player_1.selected_move = (row, col)
         # For other turns, ignore clicks.
-        
+
     def play_game(self):
         if self.game.game_state != GameState.FINISHED:
             # For Human turn, wait if no move has been selected.

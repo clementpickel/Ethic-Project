@@ -9,7 +9,6 @@ from human_bot import HumanPlayer
 from training import TrainingManager
 from learning_bot import LearningBot
 
-
 def main():
     root = tk.Tk()
     root.title("Gomoku Game")

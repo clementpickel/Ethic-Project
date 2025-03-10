@@ -1,6 +1,5 @@
 # human_bot.py
 from bot import Bot
-from menum import GameState
 
 class HumanPlayer(Bot):
     def __init__(self, symbol):

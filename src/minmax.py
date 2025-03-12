@@ -2,7 +2,7 @@ from bot import Bot
 
 
 class MinMaxBot(Bot):
-    def __init__(self, symbol, depth=5):
+    def __init__(self, symbol, depth=2):
         super().__init__(symbol, "Min Max Bot")
         self.depth = depth  # Search depth (higher = stronger but slower)
 

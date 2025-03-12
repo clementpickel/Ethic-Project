@@ -3,6 +3,7 @@ from bot import StupidBot, StupidBot2
 from minmax import MinMaxBot
 from learning_bot import LearningBot
 from human_bot import HumanPlayer
+from heuribot_bot import HeuribotBot
 
 class GameManager:
     def __init__(self):
@@ -14,6 +15,7 @@ class GameManager:
             "Stupid bot 2": StupidBot2,
             "MinMax bot": MinMaxBot,
             "Learning Bot": LearningBot,
+            "Heuristic bot": HeuribotBot,
             "You play" : HumanPlayer
         }
 

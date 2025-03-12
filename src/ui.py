@@ -278,7 +278,7 @@ class TrainingGUI(BaseGomokuGUI):
             print(f"Game {self.games_played} finished. Reward: {reward}")
             self.game.reset()
             if self.games_played < self.training_games:
-                self.root.after(self.delay, self.training_step)
+                self.root.after(self.delay, self.game_step)
             else:
                 learning_bot.save_q_table("bot2_q.json")
                 print("Training complete. Model saved to 'bot2_q.json'.")

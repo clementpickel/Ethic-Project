@@ -1,14 +1,5 @@
 import tkinter as tk
-import sys
-from gomoku import Gomoku
-from bot import StupidBot
-# from minmax import MinMaxBot
-from menum import GameState
-from ui import GomokuBotVsBotGUI, TrainingGUI, HumanVsBotGUI, MenuGUI
-from human_bot import HumanPlayer
-from training import TrainingManager
-from learning_bot import LearningBot
-from heuribot_bot import HeuribotBot
+from UI.MenuGUI import MenuGUI
 
 def main():
     root = tk.Tk()

@@ -1,5 +1,4 @@
 from bot import Bot
-from menum import GameState
 import random
 
 class HeuribotBot(Bot):

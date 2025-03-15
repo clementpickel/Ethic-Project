@@ -9,14 +9,14 @@ python src/main.py
 
 ## Different modes : 
 
-- Human vs bot
-  select a bot and play with it
-- Bot vs bot
-  select two bots and see them fight between each other
-- Train with GUI
-  train the LearningBot and see the training in the GUI
-- Train without GUI
-  train the LearningBot and see the
+### Human vs bot:
+select a bot and play with it
+### Bot vs bot:
+select two bots and see them fight between each other
+### Train with GUI:
+train the LearningBot and see the training in the GUI
+### Train without GUI:
+train the LearningBot and see the
 
 ## Threat scores 
 

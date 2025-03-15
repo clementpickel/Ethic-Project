@@ -4,5 +4,5 @@ To start
 
 ```
 pip install matplotlib
-python main.py
+python src/main.py
 ```

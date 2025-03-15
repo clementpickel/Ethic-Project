@@ -4,16 +4,13 @@ from bot import Bot
 class MinMaxBot(Bot):
     def __init__(self, symbol, depth=2):
         super().__init__(symbol, "Min Max Bot")
-        self.depth = depth  # Search depth (higher = stronger but slower)
+        self.depth = depth
 
     def play(self, board: list[list[str]]) -> tuple:
-        # Get list of valid moves (empty cells adjacent to existing pieces)
         valid_moves = self._get_valid_moves(board)
 
-        # MiniMax with Alpha-Beta pruning
         best_score = -float('inf')
         best_move = valid_moves[0]
-        # print(best_move)
 
         for move in valid_moves:
             row, col = move
@@ -29,7 +26,6 @@ class MinMaxBot(Bot):
         return best_move
 
     def _minimax(self, board, depth, alpha, beta, is_maximizing):
-        # Check for terminal states
         if self._check_win(board, self.player):
             return 1000
         if self._check_win(board, self.opponent):

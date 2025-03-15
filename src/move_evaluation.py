@@ -161,10 +161,10 @@ class MoveEvaluation:
     def add_score(self, player, score):
         if player == self.player_1:
             self.player_1_score_history.append(self.player_1_score)
-            print("Player 1 score is ", self.player_1_score)
+            print(f"Player 1 ({self.player_1.botType}) score is {self.player_1_score}")
         else:
             self.player_2_score_history.append(self.player_2_score)
-            print("Player 2 score is ", self.player_2_score)
+            print(f"Player 2 ({self.player_2.botType}) score is {self.player_2_score}")
 
     def plot_score_history(self):
 
@@ -172,8 +172,11 @@ class MoveEvaluation:
         moves_player1 = list(range(1, len(self.player_1_score_history) + 1))
         moves_player2 = list(range(1, len(self.player_2_score_history) + 1))
 
-        plt.plot(moves_player1, self.player_1_score_history, label='Player 1', marker='o')
-        plt.plot(moves_player2, self.player_2_score_history, label='Player 2', marker='o')
+        label_player_1 = f"Player 1 ({self.player_1.botType})"
+        label_player_2 = f"Player 2 ({self.player_2.botType})"
+
+        plt.plot(moves_player1, self.player_1_score_history, label=label_player_1, marker='o')
+        plt.plot(moves_player2, self.player_2_score_history, label=label_player_2, marker='o')
 
         plt.xlabel('move number')
         plt.ylabel('score')

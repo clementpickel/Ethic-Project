@@ -68,7 +68,7 @@ class BaseGomokuGUI:
             winner = self.game.player_1.botType
             winner_string = "Player 1"
         elif winner == GameState.PLAYER_2:
-            winner = self.game.player_1.botType
+            winner = self.game.player_2.botType
             winner_string = "Player 2"
         else:
             winner = "Draw"

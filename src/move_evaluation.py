@@ -167,7 +167,6 @@ class MoveEvaluation:
             print(f"Player 2 ({self.player_2.botType}) score is {self.player_2_score}")
 
     def plot_score_history(self):
-
         plt.figure(figsize=(8, 6))
         moves_player1 = list(range(1, len(self.player_1_score_history) + 1))
         moves_player2 = list(range(1, len(self.player_2_score_history) + 1))
@@ -180,7 +179,11 @@ class MoveEvaluation:
 
         plt.xlabel('move number')
         plt.ylabel('score')
-        plt.title('creativity score or "threat score", per move')
+        plt.title('creativity score, or "threat score", per move')
         plt.legend()
         plt.grid(True)
+
+        # showing just the integer, not "1,5" move, etc
+        plt.xticks(range(1, max(len(self.player_1_score_history), len(self.player_2_score_history)) + 1))
+
         plt.show()

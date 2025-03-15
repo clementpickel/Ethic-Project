@@ -16,7 +16,7 @@ select two bots and see them fight between each other
 ### Train with GUI:
 train the LearningBot and see the training in the GUI
 ### Train without GUI:
-train the LearningBot and see the
+train the LearningBot and see the training in the shell
 
 ## Threat scores 
 

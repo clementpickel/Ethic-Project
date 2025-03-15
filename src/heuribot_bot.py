@@ -42,7 +42,6 @@ class HeuribotBot(Bot):
         self.last_board = board
         return move
     
-    
     # tools
     def changePower(self, newPower):
         if newPower >= len(self.map):

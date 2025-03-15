@@ -7,6 +7,7 @@ from training import TrainingManager
 from learning_bot import LearningBot
 from bot import StupidBot, StupidBot2
 from gomoku import Gomoku
+from heuribot_bot import HeuribotBot
 
 import tkinter as tk
 from menum import GameState
@@ -118,16 +119,17 @@ class MenuGUI:
             bot2 = LearningBot(GameState.PLAYER_2)
             bot1.load_q_table("bot1_q.json")
             bot2.load_q_table("bot2_q.json")
-            trainer = TrainingManager(bot1, bot2, num_games=5000)
+            trainer = TrainingManager(bot1, bot2, num_games=200000)
             trainer.run_training_session()
             bot1.save_q_table("bot1_q.json")
             bot2.save_q_table("bot2_q.json")
 
     def launch_train_with_gui(self, bot1_name, bot2_name):
             print("Train with GUI")
-            bot1 = StupidBot(GameState.PLAYER_1)
+            bot1 = LearningBot(GameState.PLAYER_1)
             bot2 = LearningBot(GameState.PLAYER_2)
             try:
+                bot1.load_q_table("bot1_q.json")
                 bot2.load_q_table("bot2_q.json")
                 print("Loaded trained model for LearningBot.")
             except Exception as e:
@@ -135,7 +137,7 @@ class MenuGUI:
             game = Gomoku(bot1, bot2)
             game_window = tk.Toplevel(self.root)
             game_window.title("Gomoku Training Mode (GUI)")
-            TrainingGUI(game_window, game, training_games=5000, delay=500)
+            TrainingGUI(game_window, game, training_games=5000, delay=1)
 
     def launch_human_vs_bot(self, bot1_name, bot2_name):
             print("play human")

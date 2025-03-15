@@ -11,7 +11,7 @@ class Gomoku:
         self.winner = None
         self.board = [[None for _ in range(size)] for _ in range(size)]
         self.game_state = GameState.START
-        print(f"Game begin. Player one is a {player_1.botType} and player 2 is a {player_2.botType}")
+        # print(f"Game begin. Player one is a {player_1.botType} and player 2 is a {player_2.botType}")
 
     def reset(self):
         self.board = [[None for _ in range(self.size)] for _ in range(self.size)]
@@ -64,7 +64,7 @@ class Gomoku:
                 return  # For human player waiting for input
             row, col = move
             result = self.make_move(row, col)
-            print(f"Player 1 ({self.player_1.botType}) move {(row, col)} result: {result}")
+            # print(f"Player 1 ({self.player_1.botType}) move {(row, col)} result: {result}")
             if result == TurnResult.WIN or result == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if result == TurnResult.WIN:
@@ -77,7 +77,7 @@ class Gomoku:
                 return
             row, col = move
             result = self.make_move(row, col)
-            print(f"Player 2 ({self.player_2.botType}) move {(row, col)} result: {result}")
+            # print(f"Player 2 ({self.player_2.botType}) move {(row, col)} result: {result}")
             if result == TurnResult.WIN or result == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if result == TurnResult.WIN:

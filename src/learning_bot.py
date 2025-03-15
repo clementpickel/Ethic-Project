@@ -28,6 +28,7 @@ class LearningBot(Bot):
     def play(self, board):
         state = hash(tuple(tuple(row) for row in board))
         valid_moves = self._get_valid_moves(board)
+        random.shuffle(valid_moves) # remove bias
         if random.random() < self.exploration_rate:
             action = random.choice(valid_moves)
         else:

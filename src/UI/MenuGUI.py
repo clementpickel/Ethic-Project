@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import ttk
 from menum import GameState
 from game_manager import GameManager
@@ -8,8 +7,6 @@ from learning_bot import LearningBot
 from gomoku import Gomoku
 
 import tkinter as tk
-from menum import GameState
-
 from UI.ui import TrainingGUI, HumanVsBotGUI, GomokuBotVsBotGUI
 
 class MenuGUI:

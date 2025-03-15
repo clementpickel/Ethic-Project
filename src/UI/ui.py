@@ -1,14 +1,8 @@
 # ui.py
 import tkinter as tk
-from tkinter import ttk
-from menum import GameState, TurnResult
-from game_manager import GameManager
-from human_bot import HumanPlayer
-from training import TrainingManager
-from learning_bot import LearningBot
-from bot import StupidBot, StupidBot2
+from menum import GameState
 from gomoku import Gomoku
-from move_evaluation import MoveEvaluation
+
 
 CELL_SIZE = 40
 

@@ -8,9 +8,7 @@ from training import TrainingManager
 from learning_bot import LearningBot
 from bot import StupidBot, StupidBot2
 from gomoku import Gomoku
-
-import tkinter as tk
-from menum import GameState
+from move_evaluation import MoveEvaluation
 
 CELL_SIZE = 40
 
@@ -64,14 +62,17 @@ class BaseGomokuGUI:
     def on_game_over(self):
 
         winner = self.game.winner
+        winner_string = "Draw"
 
         if winner == GameState.PLAYER_1:
             winner = self.game.player_1.botType
+            winner_string = "Player 1"
         elif winner == GameState.PLAYER_2:
             winner = self.game.player_2.botType
+            winner_string = "Player 2"
         else:
             winner = "Draw"
-        
+
         canvas_width = self.size * self.cell_size
         canvas_height = self.size * self.cell_size
         center_x = canvas_width // 2
@@ -85,7 +86,7 @@ class BaseGomokuGUI:
 
         text_id = self.canvas.create_text(
             center_x, center_y,
-            text=f"GAME OVER!\n{winner} wins!",
+            text=f"GAME OVER!\n{winner_string} ({winner}) wins!",
             font=("Arial", 18, "bold"),
             fill="black",
             justify="center"
@@ -104,6 +105,8 @@ class BaseGomokuGUI:
             center_x, center_y + 80,
             window=restart_btn
         )
+
+        self.game.move_evaluation.plot_score_history()
 
     def restart_game(self):
         """Optional method to reset the game"""

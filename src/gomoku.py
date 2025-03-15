@@ -2,6 +2,7 @@
 import copy
 from menum import GameState, TurnResult
 from bot import Bot
+from move_evaluation import MoveEvaluation
 
 class Gomoku:
     def __init__(self, player_1: Bot, player_2: Bot, size=15):
@@ -11,6 +12,7 @@ class Gomoku:
         self.winner = None
         self.board = [[None for _ in range(size)] for _ in range(size)]
         self.game_state = GameState.START
+        self.move_evaluation = MoveEvaluation(player_1, player_2)
         # print(f"Game begin. Player one is a {player_1.botType} and player 2 is a {player_2.botType}")
 
     def reset(self):
@@ -65,6 +67,7 @@ class Gomoku:
             row, col = move
             result = self.make_move(row, col)
             # print(f"Player 1 ({self.player_1.botType}) move {(row, col)} result: {result}")
+            self.move_evaluation.move_evaluation(self.player_1, self.board)
             if result == TurnResult.WIN or result == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
                 if result == TurnResult.WIN:
@@ -77,6 +80,7 @@ class Gomoku:
                 return
             row, col = move
             result = self.make_move(row, col)
+            self.move_evaluation.move_evaluation(self.player_2, self.board)
             # print(f"Player 2 ({self.player_2.botType}) move {(row, col)} result: {result}")
             if result == TurnResult.WIN or result == TurnResult.DRAW:
                 self.game_state = GameState.FINISHED
@@ -84,3 +88,9 @@ class Gomoku:
                     self.winner = self.player_2.player
             else:
                 self.game_state = GameState.PLAYER_1
+
+"""
+- move_evaluation check which player just played
+- move_evaluation check the position of all the pieces of the player and calculate a score
+- move_evaluation can compare with the previous score of the player to see the difference
+"""

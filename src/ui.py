@@ -11,11 +11,6 @@ from gomoku import Gomoku
 
 CELL_SIZE = 40
 
-import tkinter as tk
-from menum import GameState
-
-CELL_SIZE = 40
-
 class BaseGomokuGUI:
     """
     base class to not have redondant functions
@@ -84,7 +79,7 @@ class MenuGUI:
         self.root.geometry(f"{win_width}x{win_height}+{x_offset}+{y_offset}")
 
         # default mode
-        self.selected_mode = "Train with GUI"
+        self.selected_mode = "Human vs Bot"
         self.game_manager = GameManager()
         self.game_happening = False
         self.draw_menu()
@@ -232,8 +227,10 @@ class GomokuBotVsBotGUI(BaseGomokuGUI):
     def on_game_over(self):
         if self.game.winner == GameState.PLAYER_1:
             print("Player 1 wins!")
+            self.game.move_evaluation.plot_score_history()
         elif self.game.winner == GameState.PLAYER_2:
             print("Player 2 wins!")
+            self.game.move_evaluation.plot_score_history()
         else:
             print("It's a draw!")
 
@@ -305,8 +302,10 @@ class HumanVsBotGUI(BaseGomokuGUI):
 
     def on_game_over(self):
         if self.game.winner == GameState.PLAYER_1:
-            self.info_label.config(text="Human wins")
+            print("Human wins!")
+            self.game.move_evaluation.plot_score_history()
         elif self.game.winner == GameState.PLAYER_2:
-            self.info_label.config(text="Bot wins")
+            print("Bot wins!")
+            self.game.move_evaluation.plot_score_history()
         else:
-            self.info_label.config(text="Draw!")
+            print("It's a draw!")
